@@ -19,8 +19,12 @@ public class UserRepository
     {
         var output = _memoryCache.Get<List<User>>("users");
 
-        if (output is not null) return output;
+        if (output is not null){
+            _logger.LogInformation("GetUsers - Cached");
+            return output;
+        } 
 
+        _logger.LogInformation("GetUsers - Not Cached");
         output = new()
         {
             new() { FirstName = "Tim", LastName = "Corey" },
@@ -28,8 +32,8 @@ public class UserRepository
             new() { FirstName = "Jane", LastName = "Jones" }
         };
 
-        await Task.Delay(3000);
-        _memoryCache.Set("users", output, TimeSpan.FromMinutes(1));
+        await Task.Delay(1000);
+        _memoryCache.Set("users", output, TimeSpan.FromMinutes(5));
 
         return output;
     }
